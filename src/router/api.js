@@ -37,7 +37,7 @@ router.get('/listar', (req, res) => {
     });
   });
 
-  app.get('/:id', (req, res) => {
+  router.get('/:id', (req, res) => {
     /**Opcionalmente podemos agregar queryes para hacer busquedas distintas y no traer todo*/
     const filtroId = req.query.id;
     let data;
@@ -121,5 +121,14 @@ router.delete('/api/productos/borrar/:id', (req,res) => {
     productoBorrado
   })
 })
+
+router.get('/productos/vista',[], async (req, res) => {
+  res.render('listaDinamica', {
+  layout: 'index',
+  products: await productos.leer(),
+  count: (await productos.leer()).length > 0 ? true : false
+      
+})
+});
 
 export default router;
