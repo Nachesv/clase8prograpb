@@ -2,6 +2,8 @@ import express from 'express';
 import path from 'path';
 import routerProductos from './router/api.js';
 import handlebars from 'express-handlebars';
+import * as http from 'http';
+import {init} from './sockets.js';
 
 
 /** INICIALIZACION API con EXPRESS */
@@ -34,16 +36,17 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/productos', routerProductos);
 
-// Endpoint GET de la pagina principal de la API
-app.get('/api/', (req, res) => {
-	res.render('main', { layout: 'index' });
+// Endpoint GET del Socket
+app.get('/', (req, res) => {
+	res.render('main');
 });
 
+const myServer = http.Server(app);
+myServer.listen(puerto, () => console.log('Server up en puerto', puerto));
 
-const server = app.listen(puerto, () =>
-  console.log('Server up en puerto', puerto)
-);
 
-server.on('error', (err) => {
+const myWSServer = init(myServer);
+
+myServer.on('error', (err) => {
   console.log('ERROR ATAJADO', err);
 });
