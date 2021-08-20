@@ -3,7 +3,7 @@ import path from 'path';
 import routerProductos from './router/api.js';
 import handlebars from 'express-handlebars';
 import * as http from 'http';
-import {init} from './sockets.js';
+import {init} from './services/sockets.js';
 
 
 /** INICIALIZACION API con EXPRESS */
@@ -46,6 +46,8 @@ myServer.listen(puerto, () => console.log('Server up en puerto', puerto));
 
 
 const myWSServer = init(myServer);
+
+myWSServer.on('connection',)
 
 myServer.on('error', (err) => {
   console.log('ERROR ATAJADO', err);
