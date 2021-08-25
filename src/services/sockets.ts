@@ -1,7 +1,7 @@
 
 
 import {Server} from 'socket.io';
-import { Productos } from '../models/claseProducto.js';
+import { Productos } from '../models/claseProducto';
 
 export const init = (app) => {
   const io = new Server(app);

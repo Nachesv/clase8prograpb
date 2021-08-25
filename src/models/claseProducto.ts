@@ -1,3 +1,5 @@
+import express from "express";
+
 export let productos = [
     {
       id: 1,
@@ -13,10 +15,17 @@ export let productos = [
     },
   ];
 
+interface Response {
+    status?: number;
+}
+
 export class Productos {
+    elementos: { id: number; nombre: string; precio: any; thumbnail: string; }[];
     constructor() {
         this.elementos = productos;
     }
+
+    res: express.Response
 
     //funcion para leer mis productos
     async leer() {
@@ -30,7 +39,7 @@ export class Productos {
 
 
     //funcion para agregar productos
-    async guardar(title, price, thumbnail) {
+    async guardar(title: any, price: any | number, thumbnail: any) {
 
         try {
             price = parseFloat(price);
@@ -39,10 +48,11 @@ export class Productos {
             if (typeof thumbnail !== 'string') throw new Error('Thumbnail tiene que ser string de url'); 
 
             let elemento = {
-                title: title,
-                price: price,
-                thumbnail: thumbnail,
                 id: this.elementos.length + 1,
+                nombre: title,
+                precio: price,
+                thumbnail: thumbnail,
+                
             }
 
             this.elementos.push(elemento);
@@ -55,7 +65,7 @@ export class Productos {
     }
 
   
-    async leerUno(id) {
+    async leerUno(id: number) {
         
         try {
             const producto = this.elementos.find((aProduct) => aProduct.id == id);
@@ -66,7 +76,7 @@ export class Productos {
 
     }
 
-    async actualizar(id,title=null, price=null, thumbnail=null) {
+    async actualizar(id: number,title: any, price: any, thumbnail: any) {
         
         try {
             if (typeof title !== 'string') throw new Error('Titulo tiene que ser string');
@@ -75,13 +85,14 @@ export class Productos {
 
             const index = this.elementos.map((aProduct) => aProduct.id).indexOf(id);
             if (index == -1) {
+                
                 return res.status(404).json({
                   msg: 'Product not found',
                 });
             }
             
-            this.elementos[index].title = title;
-            this.elementos[index].price = price;
+            this.elementos[index].nombre = title;
+            this.elementos[index].precio = price;
             this.elementos[index].thumbnail = thumbnail;
 
             return this.elementos[index];
@@ -91,7 +102,7 @@ export class Productos {
 
     }
 
-    async borrarUno(id) {
+    async borrarUno(id: number) {
         
         try {
             const idBuscado = Number(id);

@@ -1,5 +1,5 @@
 import express from 'express';
-import {Productos} from './../models/claseProducto.js';
+import {Productos} from './../models/claseProducto';
 
 const productos = new Productos ();
 
@@ -7,7 +7,7 @@ const productos = new Productos ();
 
 const router = express.Router();
 
-router.get('/vista',[], async (req, res) => {
+router.get('/vista',[], async (_req: express.Request, res: express.Response) => {
   res.render('./partials/listaDinamica', {
   layout: 'index',
   products: await productos.leer(),
@@ -16,12 +16,12 @@ router.get('/vista',[], async (req, res) => {
 })
 });
 
-router.get('/formulario',[], async (req, res) => {
+router.get('/formulario',[], async (_req: express.Request, res: express.Response) => {
 res.render('./partials/formulario', { layout: 'index'});
 });
 
 
-router.get('/listar',[], async (req, res) => {
+router.get('/listar',[], async (_req: express.Request, res: express.Response) => {
   
     let data=await productos.leer();
     
@@ -33,7 +33,7 @@ router.get('/listar',[], async (req, res) => {
     });
   });
 
-router.get('/listar/:id', [], async (req, res) => {
+router.get('/listar/:id', [], async (_req: express.Request, res: express.Response) => {
     console.log(req.params);
     const idBuscado = parseInt( req.params.id);
     let producto = await productos.leerUno(idBuscado);
@@ -51,7 +51,7 @@ router.get('/listar/:id', [], async (req, res) => {
   
   
   
-router.post('/guardar',[], async (req, res) => {
+router.post('/guardar',[], async (_req: express.Request, res: express.Response) => {
     const {title, price, thumbnail} = req.body;        
     const nuevoProducto = await productos.guardar(title, Number(price), thumbnail);
     return res.status(201).json({
@@ -59,7 +59,7 @@ router.post('/guardar',[], async (req, res) => {
     });
   });
 
-router.put('/actualizar/:id',[], async (req, res) => {
+router.put('/actualizar/:id',[], async (_req: express.Request, res: express.Response) => {
     const {title, price, thumbnail} = req.body;
     const {id} = req.params;
         
@@ -70,7 +70,7 @@ router.put('/actualizar/:id',[], async (req, res) => {
     });
   });
 
-router.delete('/borrar/:id', [], async (req, res) => {
+router.delete('/borrar/:id', [], async (_req: express.Request, res: express.Response) => {
     console.log(req.params);
     const idBuscado = parseInt( req.params.id);
     let producto = await productos.borrarUno(idBuscado);
